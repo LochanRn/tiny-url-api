@@ -1,0 +1,58 @@
+definitions:
+  v1Ping:    
+    type: object
+    properties:
+      msg:
+        type: string
+  v1APIError:
+    type: string
+
+  v1Tinyurl:
+    type: object
+    properties:
+      url:
+        type: string
+
+  v1Time:
+    format: date-time
+    type: string
+
+  v1Domain:
+    type: object
+    properties:
+      domains:
+        type: string
+      count:
+        type: integer
+
+responses:
+  v1Tinyurl:
+    type: object
+    properties:
+      url:
+        type: string
+      tinyurl:
+        type: string
+      creationTimestamp:
+        $ref: "#/definitions/v1Time"
+
+  v1DomainsShorterned:
+    type: object
+    properties:
+      domains:
+        type: array
+        items:
+          $ref: "#/definitions/v1Domain"
+
+errors:
+  v1APIError:
+    type: object
+    properties:
+      error:
+        type: string
+
+  v1InternalServerError:
+    type: object
+    properties:
+      error:
+        type: string

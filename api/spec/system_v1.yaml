@@ -1,0 +1,99 @@
+paths:
+  V1Ping:
+    get:
+      description: Ping Service
+      tags:
+        - troubleshoot
+      summary: Ping Service
+      operationId: V1Ping
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "./models_v1.yaml#/definitions/v1Ping"
+        default:
+          description: generic error response
+          schema:
+            $ref: "./models_v1.yaml#/definitions/v1APIError"
+
+  V1Tinyurl:
+    post:
+      description: URL Shortener
+      tags:
+        - tinyurl
+      summary: URL Shortener
+      operationId: V1TinyurlPost
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: URL to shorten
+          required: true
+          schema:
+            $ref: "./models_v1.yaml#/definitions/v1Tinyurl"
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "./models_v1.yaml#/responses/v1Tinyurl"
+        "500": 
+          description: Internal Server Error
+          schema:
+            $ref: "./models_v1.yaml#/errors/v1InternalServerError"
+        default:
+          description: generic error response
+          schema:
+            $ref: "./models_v1.yaml#/errors/v1APIError"
+
+  V1URL:
+    get:
+      description: Redirect to original URL
+      tags:
+        - tinyurl
+      summary: Redirect to original URL
+      operationId: V1TinyurlRedirect
+      parameters:
+        - in: path
+          name: tinyurl
+          description: TinyURL to original URL
+          required: true
+          type: string
+      responses:
+        "302":
+          description: Redirect to the original URL
+          headers:
+            Location:              
+              description: Original URL
+              type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: "./models_v1.yaml#/errors/v1InternalServerError"
+        default:
+          description: generic error response
+          schema:
+            $ref: "./models_v1.yaml#/errors/v1APIError"
+  
+  V1HighestDomainsShortened:
+    get:
+      description: Domains shortened the most
+      tags:
+        - tinyurl
+      summary: Domains shortened the most
+      operationId: V1DomainsShorterned
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "./models_v1.yaml#/responses/v1DomainsShorterned"
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: "./models_v1.yaml#/errors/v1InternalServerError"
+        default:
+          description: generic error response
+          schema:
+            $ref: "./models_v1.yaml#/errors/v1APIError"

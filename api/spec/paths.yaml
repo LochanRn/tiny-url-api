@@ -1,0 +1,12 @@
+paths:
+  /v1/ping:
+    $ref: "./system_v1.yaml#/paths/V1Ping"
+
+  /v1/tinyurl:
+    $ref: "./system_v1.yaml#/paths/V1Tinyurl"
+
+  /v1/tinyurl/{tinyurl}:
+    $ref: "./system_v1.yaml#/paths/V1URL"
+
+  /v1/maxdomainsabbrev:
+    $ref: "./system_v1.yaml#/paths/V1HighestDomainsShortened"

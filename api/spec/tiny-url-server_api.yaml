@@ -1,0 +1,155 @@
+consumes:
+    - application/json
+produces:
+    - application/json
+schemes:
+    - http
+swagger: "2.0"
+info:
+    description: This is a tiny url server project
+    title: tiny-url-server
+    version: 1.0.0
+paths:
+    /v1/maxdomainsabbrev:
+        get:
+            description: Domains shortened the most
+            tags:
+                - tinyurl
+            summary: Domains shortened the most
+            operationId: V1DomainsShorterned
+            responses:
+                "200":
+                    description: OK
+                    schema:
+                        $ref: '#/definitions/v1DomainsShorterned'
+                "500":
+                    description: Internal Server Error
+                    schema:
+                        $ref: '#/definitions/v1InternalServerError'
+                default:
+                    description: generic error response
+                    schema:
+                        $ref: '#/definitions/v1DomainsShorternedDefaultBody'
+    /v1/ping:
+        get:
+            description: Ping Service
+            tags:
+                - troubleshoot
+            summary: Ping Service
+            operationId: V1Ping
+            responses:
+                "200":
+                    description: OK
+                    schema:
+                        $ref: '#/definitions/v1Ping'
+                default:
+                    description: generic error response
+                    schema:
+                        $ref: '#/definitions/v1ApiError'
+    /v1/tinyurl:
+        post:
+            description: URL Shortener
+            consumes:
+                - application/json
+            produces:
+                - application/json
+            tags:
+                - tinyurl
+            summary: URL Shortener
+            operationId: V1TinyurlPost
+            parameters:
+                - schema:
+                    $ref: '#/definitions/v1Tinyurl'
+                  description: URL to shorten
+                  name: body
+                  in: body
+                  required: true
+            responses:
+                "200":
+                    schema:
+                        type: object
+                        properties:
+                            creationTimestamp:
+                                $ref: '#/definitions/v1Time'
+                            tinyurl:
+                                type: string
+                            url:
+                                type: string
+                    description: OK
+                "500":
+                    description: Internal Server Error
+                    schema:
+                        $ref: '#/definitions/v1InternalServerError'
+                default:
+                    description: generic error response
+                    schema:
+                        $ref: '#/definitions/v1DomainsShorternedDefaultBody'
+    /v1/tinyurl/{tinyurl}:
+        get:
+            responses:
+                "302":
+                    description: Redirect to the original URL
+                    headers:
+                        Location:
+                            type: string
+                            description: Original URL
+                "500":
+                    description: Internal Server Error
+                    schema:
+                        $ref: '#/definitions/v1InternalServerError'
+                default:
+                    description: generic error response
+                    schema:
+                        $ref: '#/definitions/v1DomainsShorternedDefaultBody'
+            description: Redirect to original URL
+            tags:
+                - tinyurl
+            summary: Redirect to original URL
+            operationId: V1TinyurlRedirect
+            parameters:
+                - description: TinyURL to original URL
+                  name: tinyurl
+                  in: path
+                  required: true
+                  type: string
+definitions:
+    v1Tinyurl:
+        type: object
+        properties:
+            url:
+                type: string
+    v1ApiError:
+        type: string
+    v1Domain:
+        type: object
+        properties:
+            count:
+                type: integer
+            domains:
+                type: string
+    v1DomainsShorterned:
+        type: object
+        properties:
+            domains:
+                items:
+                    $ref: '#/definitions/v1Domain'
+                type: array
+    v1DomainsShorternedDefaultBody:
+        type: object
+        properties:
+            error:
+                type: string
+        x-go-gen-location: operations
+    v1InternalServerError:
+        type: object
+        properties:
+            error:
+                type: string
+    v1Ping:
+        type: object
+        properties:
+            msg:
+                type: string
+    v1Time:
+        type: string
+        format: date-time
